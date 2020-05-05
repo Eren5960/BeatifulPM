@@ -34,12 +34,7 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Utils;
 
 class Initer extends PluginBase{
-
     protected function onEnable(){
-    	if(Utils::getOS() !== 'win'){
-    		$this->getServer()->getPluginManager()->disablePlugin($this);
-    		return;
-	    }
 		self::initItems();
 		self::initTiles();
 	    self::initBlocks();
