@@ -15,7 +15,6 @@ declare(strict_types=1);
  
 namespace Eren5960\BeautifulPM\inventory;
 
-use Eren5960\BeautifulPM\block\Barrel;
 use Eren5960\BeautifulPM\sound\BarrelCloseSound;
 use Eren5960\BeautifulPM\sound\BarrelOpenSound;
 use pocketmine\inventory\ChestInventory;

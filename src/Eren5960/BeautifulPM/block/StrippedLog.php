@@ -14,15 +14,13 @@
 declare(strict_types=1);
  
 namespace Eren5960\BeautifulPM\block;
- 
-use Eren5960\BeautifulPM\utils\FacingUtils;
+
 use pocketmine\block\Block;
 use pocketmine\block\BlockBreakInfo;
 use pocketmine\block\BlockIdentifier;
 use pocketmine\block\BlockToolType;
 use pocketmine\block\Opaque;
 use pocketmine\block\utils\BlockDataSerializer;
-use pocketmine\block\utils\PillarRotationTrait;
 use pocketmine\item\Item;
 use pocketmine\math\Facing;
 use pocketmine\math\Vector3;

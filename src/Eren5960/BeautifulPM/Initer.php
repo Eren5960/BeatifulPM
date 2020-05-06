@@ -12,26 +12,23 @@
  * @date 02 Mayıs 2020
  */
 declare(strict_types=1);
- 
+
 namespace Eren5960\BeautifulPM;
- 
+
 use Eren5960\BeautifulPM\block\Barrel as BarrelBlock;
 use Eren5960\BeautifulPM\block\StrippedLog;
 use Eren5960\BeautifulPM\item\Barrel;
 use Eren5960\BeautifulPM\item\Bell;
 use Eren5960\BeautifulPM\block\Bell as BellBlock;
 use Eren5960\BeautifulPM\tile\Barrel as BarrelTile;
-use Eren5960\BeautifulPM\tile\Barrier;
 use Eren5960\BeautifulPM\tile\Bell as BellTile;
 use Eren5960\BeautifulPM\item\TurtleShell;
 use pocketmine\block\BlockBreakInfo;
 use pocketmine\block\BlockFactory;
 use pocketmine\block\BlockIdentifier;
 use pocketmine\block\BlockLegacyIds;
-use pocketmine\block\BlockLegacyIds as Ids;
 use pocketmine\block\Log;
 use pocketmine\block\tile\TileFactory;
-use pocketmine\block\Transparent;
 use pocketmine\block\utils\TreeType;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
@@ -43,52 +40,51 @@ use pocketmine\item\ItemIds;
 use pocketmine\plugin\PluginBase;
 
 class Initer extends PluginBase implements Listener{
-    protected function onEnable(){
+	protected function onEnable(){
 		self::initItems();
 		self::initTiles();
-	    self::initBlocks();
-	    $this->getServer()->getPluginManager()->registerEvents($this, $this);
-    }
+		self::initBlocks();
+		$this->getServer()->getPluginManager()->registerEvents($this, $this);
+	}
 
-    private static function initItems(): void{
-    	$items = [
-    		new Bell(0), new TurtleShell(0),
-		    new Barrel(0), new ItemBlock(BlockLegacyIds::BARRIER, 0, ItemIds::BARRIER)
-	    ];
-	    foreach(TreeType::getAll() as $treeType){
-		    $items[] = new ItemBlock(BlockLegacyIds::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(), 0, ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber());
-	    }
+	private static function initItems() : void{
+		$items = [
+			new Bell(0),
+			new TurtleShell(0),
+			new Barrel(0),
+			new ItemBlock(BlockLegacyIds::BARRIER, 0, ItemIds::BARRIER)
+		];
+		foreach(TreeType::getAll() as $treeType){
+			$items[] = new ItemBlock(BlockLegacyIds::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(), 0, ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber());
+		}
 		foreach($items as $item){
 			ItemFactory::register($item, true);
 			CreativeInventory::add($item);
 		}
-    }
+	}
 
-	private static function initBlocks(): void{
+	private static function initBlocks() : void{
 		$blocks = [
 			new BellBlock(new BlockIdentifier(BlockLegacyIds::BELL, 0, ItemIds::BELL, BellTile::class), 'Bell', BlockBreakInfo::instant()),
 			new BarrelBlock(new BlockIdentifier(BlockLegacyIds::BARREL, 0, ItemIds::BARREL, BarrelTile::class))
 		];
 		foreach(TreeType::getAll() as $treeType){
-			$blocks[] = new StrippedLog(new BlockIdentifier(
-				BlockLegacyIds::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(), 0,
-				ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber()
-			), $treeType->getDisplayName() . ' Wood');
+			$blocks[] = new StrippedLog(new BlockIdentifier(BlockLegacyIds::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(), 0, ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber()), $treeType->getDisplayName() . ' Wood');
 		}
 		foreach($blocks as $block){
 			BlockFactory::register($block, true);
 		}
 	}
 
-	private static function initTiles(): void{
+	private static function initTiles() : void{
 		TileFactory::register(BellTile::class, ['Bell', 'minecraft:bell']);
 		TileFactory::register(BarrelTile::class, ['Barrel', 'minecraft:barrel']);
 	}
 
-	public function onInteract(PlayerInteractEvent $event): void{
-    	$block = $event->getBlock();
-    	if($event->getAction() === $event::RIGHT_CLICK_BLOCK && ($event->getItem() instanceof Axe && $block instanceof Log)){// stripe logs
-		    $block->getPos()->getWorldNonNull()->setBlock($block->getPos(), BlockFactory::get(BlockLegacyIds::STRIPPED_OAK_LOG - $block->getTreeType()->getMagicNumber()), false);
-	    }
+	public function onInteract(PlayerInteractEvent $event) : void{
+		$block = $event->getBlock();
+		if($event->getAction() === $event::RIGHT_CLICK_BLOCK && ($event->getItem() instanceof Axe && $block instanceof Log)){// stripe logs
+			$block->getPos()->getWorldNonNull()->setBlock($block->getPos(), BlockFactory::get(BlockLegacyIds::STRIPPED_OAK_LOG - $block->getTreeType()->getMagicNumber()), false);
+		}
 	}
 }

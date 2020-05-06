@@ -14,17 +14,11 @@
 declare(strict_types=1);
  
 namespace Eren5960\BeautifulPM\item;
- 
-use pocketmine\block\Block;
-use pocketmine\entity\effect\EffectInstance;
-use pocketmine\entity\effect\VanillaEffects;
+
 use pocketmine\inventory\ArmorInventory;
 use pocketmine\item\Armor;
 use pocketmine\item\ArmorTypeInfo;
 use pocketmine\item\ItemIds;
-use pocketmine\item\ItemUseResult;
-use pocketmine\math\Vector3;
-use pocketmine\player\Player;
 
 class TurtleShell extends Armor{
     public function __construct(int $variant){
