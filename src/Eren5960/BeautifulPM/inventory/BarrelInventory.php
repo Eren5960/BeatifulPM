@@ -13,11 +13,11 @@
  */
 declare(strict_types=1);
  
-namespace Eren5960\BeatifulPM\inventory;
+namespace Eren5960\BeautifulPM\inventory;
 
-use Eren5960\BeatifulPM\block\Barrel;
-use Eren5960\BeatifulPM\sound\BarrelCloseSound;
-use Eren5960\BeatifulPM\sound\BarrelOpenSound;
+use Eren5960\BeautifulPM\block\Barrel;
+use Eren5960\BeautifulPM\sound\BarrelCloseSound;
+use Eren5960\BeautifulPM\sound\BarrelOpenSound;
 use pocketmine\inventory\ChestInventory;
 use pocketmine\world\sound\Sound;
 
@@ -29,12 +29,5 @@ class BarrelInventory extends ChestInventory{
 
 	protected function getCloseSound() : Sound{
 		return new BarrelCloseSound();
-	}
-
-	protected function broadcastBlockEventPacket(bool $isOpen) : void{
-		$barrel = $this->getHolder()->getWorldNonNull()->getBlock($this->getHolder());
-		if($barrel instanceof Barrel){
-			$barrel->setOpen($isOpen);
-		}
 	}
 }

@@ -13,7 +13,7 @@
  */
 declare(strict_types=1);
  
-namespace Eren5960\BeatifulPM\item;
+namespace Eren5960\BeautifulPM\item;
  
 use pocketmine\block\BlockLegacyIds;
 use pocketmine\item\ItemBlock;

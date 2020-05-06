@@ -13,7 +13,7 @@
  */
 declare(strict_types=1);
  
-namespace Eren5960\BeatifulPM\tile;
+namespace Eren5960\BeautifulPM\tile;
  
 use pocketmine\block\tile\Spawnable;
 use pocketmine\nbt\tag\CompoundTag;
@@ -22,6 +22,7 @@ class Bell extends Spawnable{
 	public const BELL_ATTACHMENT = 'attachment';
 	/** @var string */
 	public $attachment = 'standing';
+	// TODO
 
 	public function readSaveData(CompoundTag $nbt) : void{
 		$this->attachment = $nbt->getString(self::BELL_ATTACHMENT, 'standing');

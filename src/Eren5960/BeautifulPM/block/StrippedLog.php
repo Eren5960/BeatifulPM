@@ -9,50 +9,58 @@
  *
  * @author Eren5960
  * @link https://github.com/Eren5960
- * @date 02 Mayıs 2020
+ * @date 06 Mayıs 2020
  */
 declare(strict_types=1);
-
-namespace Eren5960\BeatifulPM\block;
-
+ 
+namespace Eren5960\BeautifulPM\block;
+ 
+use Eren5960\BeautifulPM\utils\FacingUtils;
 use pocketmine\block\Block;
+use pocketmine\block\BlockBreakInfo;
+use pocketmine\block\BlockIdentifier;
+use pocketmine\block\BlockToolType;
+use pocketmine\block\Opaque;
 use pocketmine\block\utils\BlockDataSerializer;
+use pocketmine\block\utils\PillarRotationTrait;
 use pocketmine\item\Item;
 use pocketmine\math\Facing;
 use pocketmine\math\Vector3;
-use pocketmine\network\mcpe\protocol\BlockEventPacket;
-use pocketmine\network\mcpe\protocol\EventPacket;
-use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\player\Player;
 use pocketmine\world\BlockTransaction;
 
-class Bell extends Block{
-	/** @var int */
-	protected $facing = Facing::NORTH;
+class StrippedLog extends Opaque{
+	public $facing = Facing::UP;
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
-		$this->getPos()->getWorldNonNull()->broadcastLevelEvent($this->getPos(), LevelSoundEventPacket::SOUND_BLOCK_BELL_HIT, 1000);
-		$this->getPos()->getWorldNonNull()->broadcastPacketToViewers($this->getPos(), BlockEventPacket::create(EventPacket::TYPE_BELL_BLOCK_USED, 1000, $this->getPos()));
-		return true;
+	public function __construct(BlockIdentifier $idInfo, string $name, ?BlockBreakInfo $breakInfo = null){
+		parent::__construct($idInfo, "Stripped " . $name, $breakInfo ?? new BlockBreakInfo(2.0, BlockToolType::AXE));
 	}
 
 	protected function writeStateToMeta() : int{
-		return BlockDataSerializer::writeHorizontalFacing($this->facing);
+		return BlockDataSerializer::writeFacing($this->facing);
 	}
 
 	public function readStateFromData(int $id, int $stateMeta) : void{
-		$this->facing = BlockDataSerializer::readHorizontalFacing($stateMeta);
-	}
-
-	public function getStateBitmask() : int{
-		return 0b1111;
+		$this->facing = BlockDataSerializer::readFacing($stateMeta);
 	}
 
 	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
 		if($player !== null){
-			$this->facing = Facing::opposite($player->getHorizontalFacing());
+			$this->facing = $face <= 1 ? 0 : ($face > 3 ? 1 : 2);
 		}
 
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
+	}
+
+	public function getFuelTime() : int{
+		return 300;
+	}
+
+	public function getFlameEncouragement() : int{
+		return 5;
+	}
+
+	public function getFlammability() : int{
+		return 5;
 	}
 }

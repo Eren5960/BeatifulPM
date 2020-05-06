@@ -13,9 +13,9 @@
  */
 declare(strict_types=1);
  
-namespace Eren5960\BeatifulPM\tile;
+namespace Eren5960\BeautifulPM\tile;
  
-use Eren5960\BeatifulPM\inventory\BarrelInventory;
+use Eren5960\BeautifulPM\inventory\BarrelInventory;
 use pocketmine\block\tile\Container;
 use pocketmine\block\tile\ContainerTrait;
 use pocketmine\block\tile\Nameable;
@@ -30,12 +30,9 @@ class Barrel extends Spawnable implements Container, Nameable{
 		addAdditionalSpawnData as addNameData;
 	}
 	use ContainerTrait;
-	public const TAG_OPEN = 'open';
 
 	/** @var BarrelInventory */
 	public $inventory;
-	/** @var bool */
-	protected $open = false;
 
 	public function __construct(World $world, Vector3 $pos){
 		parent::__construct($world, $pos);
@@ -57,26 +54,14 @@ class Barrel extends Spawnable implements Container, Nameable{
 	public function readSaveData(CompoundTag $nbt) : void{
 		$this->loadName($nbt);
 		$this->loadItems($nbt);
-		$this->open = boolval($nbt->getByte(self::TAG_OPEN, 0));
 	}
 
 	protected function writeSaveData(CompoundTag $nbt) : void{
 		$this->saveName($nbt);
 		$this->saveItems($nbt);
-		$nbt->setByte(self::TAG_OPEN, intval($this->open));
 	}
 
 	protected function addAdditionalSpawnData(CompoundTag $nbt) : void{
 		$this->addNameData($nbt);
-		$nbt->setByte(self::TAG_OPEN, intval($this->open));
-	}
-
-	public function setOpen(bool $isOpen): void{
-		$this->open = $isOpen;
-		$this->setDirty(true);
-	}
-
-	public function isOpen(): bool{
-		return $this->open;
 	}
 }

@@ -9,19 +9,18 @@
  *
  * @author Eren5960
  * @link https://github.com/Eren5960
- * @date 05 Mayıs 2020
+ * @date 02 Mayıs 2020
  */
 declare(strict_types=1);
+ 
+namespace Eren5960\BeautifulPM\item;
+ 
+use pocketmine\block\BlockLegacyIds;
+use pocketmine\item\ItemBlock;
+use pocketmine\item\ItemIds;
 
-namespace Eren5960\BeatifulPM\sound;
-
-use pocketmine\math\Vector3;
-use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
-use pocketmine\world\sound\Sound;
-
-class BarrelCloseSound implements Sound{
-
-	public function encode(?Vector3 $pos){
-		return LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_BLOCK_BARREL_CLOSE, $pos);
+class Bell extends ItemBlock{
+	public function __construct(int $meta = 0){
+		parent::__construct(BlockLegacyIds::BELL, $meta, ItemIds::BELL);
 	}
 }

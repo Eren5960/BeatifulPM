@@ -13,9 +13,10 @@
  */
 declare(strict_types=1);
  
-namespace Eren5960\BeatifulPM\block;
+namespace Eren5960\BeautifulPM\block;
  
-use Eren5960\BeatifulPM\tile\Barrel as TileBarrel;
+use Eren5960\BeautifulPM\tile\Barrel as TileBarrel;
+use Eren5960\BeautifulPM\utils\FacingUtils;
 use pocketmine\block\Block;
 use pocketmine\block\BlockBreakInfo;
 use pocketmine\block\BlockIdentifier;
@@ -32,14 +33,14 @@ class Barrel extends Opaque{
 	/** @var int */
 	protected $facing = Facing::UP;
 	/** @var bool */
-	public $open = false;
+	public $open = false; // what is open_bit
 
 	public function __construct(BlockIdentifier $idInfo, ?BlockBreakInfo $breakInfo = null){
 		parent::__construct($idInfo, "Barrel", $breakInfo ?? new BlockBreakInfo(2.5, BlockToolType::AXE));
 	}
 
 	protected function writeStateToMeta() : int{
-		return BlockDataSerializer::writeFacing($this->facing) | ($this->open ? 1 : 0);
+		return BlockDataSerializer::writeFacing($this->facing) | ($this->open ? 0x01 : 0);
 	}
 
 	public function readStateFromData(int $id, int $stateMeta) : void{
@@ -47,31 +48,9 @@ class Barrel extends Opaque{
 		$this->open = ($stateMeta & 0x01) !== 0;
 	}
 
-	public function readStateFromWorld() : void{
-		parent::readStateFromWorld();
-
-		$tile = $this->pos->getWorldNonNull()->getTile($this->pos);
-		if($tile instanceof TileBarrel){
-			$this->open = $tile->isOpen();
-		}
-	}
-
-	public function writeStateToWorld() : void{
-		parent::writeStateToWorld();
-
-		$tile = $this->pos->getWorldNonNull()->getTile($this->pos);
-		if($tile instanceof TileBarrel){
-			$tile->setOpen($this->open);
-		}
-	}
-
-	public function getStateBitmask() : int{
-		return 0b111;
-	}
-
 	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
 		if($player !== null){
-			$this->facing = Facing::opposite($this->getPlayerFacing($player));
+			$this->facing = Facing::opposite(self::getBarrelFacing($player));
 		}
 
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
@@ -92,11 +71,22 @@ class Barrel extends Opaque{
 		return true;
 	}
 
+	public function setOpen(bool $isOpen): void{
+		if($this->open !== $isOpen){ // don't works
+			$this->open = $isOpen;
+			$this->getPos()->getWorldNonNull()->setBlock($this->getPos(), $this);
+		}
+	}
+
 	public function getFuelTime() : int{
 		return 150;
 	}
 
-	public function getPlayerFacing(Player $player) : int{
+	public function getStateBitmask() : int{
+		return 0b111;
+	}
+
+	public static function getBarrelFacing(Player $player) : int{
 		$angle = $player->getLocation()->yaw % 360;
 		$pitch = $player->getLocation()->pitch % 90;
 
@@ -123,12 +113,5 @@ class Barrel extends Opaque{
 		}
 
 		return Facing::EAST;
-	}
-
-	public function setOpen(bool $isOpen): void{
-		if($this->open !== $isOpen){
-			$this->open = $isOpen;
-			$this->getPos()->getWorldNonNull()->setBlock($this->getPos(), $this);
-		}
 	}
 }

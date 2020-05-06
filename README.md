@@ -5,6 +5,7 @@ Supports new items in Minecraft: BE with this project.
 
 ### Finished
 - Barrel
+- Stripped Woods
 - Turtle Shell
 
 ### The under construction

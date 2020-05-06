@@ -13,7 +13,7 @@
  */
 declare(strict_types=1);
  
-namespace Eren5960\BeatifulPM\item;
+namespace Eren5960\BeautifulPM\item;
  
 use pocketmine\block\Block;
 use pocketmine\entity\effect\EffectInstance;
@@ -30,12 +30,4 @@ class TurtleShell extends Armor{
     public function __construct(int $variant){
 	    parent::__construct(ItemIds::TURTLE_HELMET, $variant, 'Turtle Shell', new ArmorTypeInfo(1, 56, ArmorInventory::SLOT_HEAD));
     }
-
-	/*public function onActivate(Player $player, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector) : ItemUseResult{
-		$result = parent::onActivate($player, $blockReplace, $blockClicked, $face, $clickVector);
-		if($result->equals(ItemUseResult::SUCCESS())){
-			$player->getEffects()->add(new EffectInstance(VanillaEffects::WATER_BREATHING(), 200));
-		}
-		return $result;
-	}*/
 }

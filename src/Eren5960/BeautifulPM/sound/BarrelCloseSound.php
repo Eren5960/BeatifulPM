@@ -13,15 +13,15 @@
  */
 declare(strict_types=1);
 
-namespace Eren5960\BeatifulPM\sound;
+namespace Eren5960\BeautifulPM\sound;
 
 use pocketmine\math\Vector3;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\world\sound\Sound;
 
-class BarrelOpenSound implements Sound{
+class BarrelCloseSound implements Sound{
 
 	public function encode(?Vector3 $pos){
-		return LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_BLOCK_BARREL_OPEN, $pos);
+		return LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_BLOCK_BARREL_CLOSE, $pos);
 	}
 }
