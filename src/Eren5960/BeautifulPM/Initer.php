@@ -81,6 +81,11 @@ class Initer extends PluginBase implements Listener{
 		TileFactory::register(BarrelTile::class, ['Barrel', 'minecraft:barrel']);
 	}
 
+	/**
+	 * @param PlayerInteractEvent $event
+	 * @priority HIGHEST
+	 * @handleCancelled false
+	 */
 	public function onInteract(PlayerInteractEvent $event) : void{
 		$block = $event->getBlock();
 		if($event->getAction() === $event::RIGHT_CLICK_BLOCK && ($event->getItem() instanceof Axe && $block instanceof Log)){// stripe logs
