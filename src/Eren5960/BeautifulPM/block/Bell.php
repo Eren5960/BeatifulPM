@@ -31,7 +31,7 @@ class Bell extends Block{ // TODO
 	protected $facing = Facing::NORTH;
 
 	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
-		$this->getPos()->getWorldNonNull()->broadcastLevelEvent($this->getPos(), LevelSoundEventPacket::SOUND_BLOCK_BELL_HIT, 1000);
+		$this->getPos()->getWorldNonNull()->broadcastPacketToViewers($clickVector, LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_BLOCK_BELL_HIT, $this->getPos(), 1000));
 		$this->getPos()->getWorldNonNull()->broadcastPacketToViewers($this->getPos(), BlockEventPacket::create(EventPacket::TYPE_BELL_BLOCK_USED, 1000, $this->getPos()));
 		return true;
 	}

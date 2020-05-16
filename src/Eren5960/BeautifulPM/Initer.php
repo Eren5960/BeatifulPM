@@ -58,8 +58,8 @@ class Initer extends PluginBase implements Listener{
 			$items[] = new ItemBlock(BlockLegacyIds::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(), 0, ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber());
 		}
 		foreach($items as $item){
-			ItemFactory::register($item, true);
-			CreativeInventory::add($item);
+			ItemFactory::getInstance()->register($item, true);
+			CreativeInventory::getInstance()->add($item);
 		}
 	}
 
@@ -72,13 +72,13 @@ class Initer extends PluginBase implements Listener{
 			$blocks[] = new StrippedLog(new BlockIdentifier(BlockLegacyIds::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(), 0, ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber()), $treeType->getDisplayName() . ' Wood');
 		}
 		foreach($blocks as $block){
-			BlockFactory::register($block, true);
+			BlockFactory::getInstance()->register($block, true);
 		}
 	}
 
 	private static function initTiles() : void{
-		TileFactory::register(BellTile::class, ['Bell', 'minecraft:bell']);
-		TileFactory::register(BarrelTile::class, ['Barrel', 'minecraft:barrel']);
+		TileFactory::getInstance()->register(BellTile::class, ['Bell', 'minecraft:bell']);
+		TileFactory::getInstance()->register(BarrelTile::class, ['Barrel', 'minecraft:barrel']);
 	}
 
 	/**
@@ -89,7 +89,7 @@ class Initer extends PluginBase implements Listener{
 	public function onInteract(PlayerInteractEvent $event) : void{
 		$block = $event->getBlock();
 		if($event->getAction() === $event::RIGHT_CLICK_BLOCK && ($event->getItem() instanceof Axe && $block instanceof Log)){// stripe logs
-			$block->getPos()->getWorldNonNull()->setBlock($block->getPos(), BlockFactory::get(BlockLegacyIds::STRIPPED_OAK_LOG - $block->getTreeType()->getMagicNumber()), false);
+			$block->getPos()->getWorldNonNull()->setBlock($block->getPos(), BlockFactory::getInstance()->get(BlockLegacyIds::STRIPPED_OAK_LOG - $block->getTreeType()->getMagicNumber()), false);
 		}
 	}
 }
