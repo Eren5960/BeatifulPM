@@ -27,6 +27,7 @@ use pocketmine\block\BlockBreakInfo;
 use pocketmine\block\BlockFactory;
 use pocketmine\block\BlockIdentifier;
 use pocketmine\block\BlockLegacyIds;
+use pocketmine\block\BlockToolType;
 use pocketmine\block\Log;
 use pocketmine\block\tile\TileFactory;
 use pocketmine\block\utils\TreeType;
@@ -69,7 +70,9 @@ class Initer extends PluginBase implements Listener{
 			new BarrelBlock(new BlockIdentifier(BlockLegacyIds::BARREL, 0, ItemIds::BARREL, BarrelTile::class))
 		];
 		foreach(TreeType::getAll() as $treeType){
-			$blocks[] = new StrippedLog(new BlockIdentifier(BlockLegacyIds::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(), 0, ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber()), $treeType->getDisplayName() . ' Wood');
+			$blocks[] = new StrippedLog(
+			    new BlockIdentifier(BlockLegacyIds::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(), 0, ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber()),
+                $treeType->getDisplayName() . ' Wood');
 		}
 		foreach($blocks as $block){
 			BlockFactory::getInstance()->register($block, true);
@@ -89,7 +92,12 @@ class Initer extends PluginBase implements Listener{
 	public function onInteract(PlayerInteractEvent $event) : void{
 		$block = $event->getBlock();
 		if($event->getAction() === $event::RIGHT_CLICK_BLOCK && ($event->getItem() instanceof Axe && $block instanceof Log)){// stripe logs
-			$block->getPos()->getWorldNonNull()->setBlock($block->getPos(), BlockFactory::getInstance()->get(BlockLegacyIds::STRIPPED_OAK_LOG - $block->getTreeType()->getMagicNumber()), false);
+			$block->getPos()->getWorldNonNull()->setBlock($block->getPos(),
+                BlockFactory::getInstance()->get(
+			    BlockLegacyIds::STRIPPED_SPRUCE_LOG + ($block->getTreeType()->getMagicNumber() === 0 ? 5 : $block->getTreeType()->getMagicNumber() - 1)
+                ),
+                false
+            );
 		}
 	}
 }
