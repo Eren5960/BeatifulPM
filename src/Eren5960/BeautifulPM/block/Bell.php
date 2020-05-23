@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Eren5960\BeautifulPM\block;
 
+use Eren5960\BeautifulPM\sound\BellUsedSound;
 use pocketmine\block\Block;
 use pocketmine\block\utils\BlockDataSerializer;
 use pocketmine\item\Item;
@@ -22,7 +23,6 @@ use pocketmine\math\Facing;
 use pocketmine\math\Vector3;
 use pocketmine\network\mcpe\protocol\BlockEventPacket;
 use pocketmine\network\mcpe\protocol\EventPacket;
-use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\player\Player;
 use pocketmine\world\BlockTransaction;
 
@@ -31,8 +31,8 @@ class Bell extends Block{ // TODO
 	protected $facing = Facing::NORTH;
 
 	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
-		$this->getPos()->getWorldNonNull()->broadcastPacketToViewers($clickVector, LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_BLOCK_BELL_HIT, $this->getPos(), 1000));
-		$this->getPos()->getWorldNonNull()->broadcastPacketToViewers($this->getPos(), BlockEventPacket::create(EventPacket::TYPE_BELL_BLOCK_USED, 1000, $this->getPos()));
+		$this->getPos()->getWorldNonNull()->addSound($this->getPos(), new BellUsedSound());
+		$this->getPos()->getWorldNonNull()->broadcastPacketToViewers($this->getPos(), BlockEventPacket::create(EventPacket::TYPE_BELL_BLOCK_USED, 1, $this->getPos()));
 		return true;
 	}
 
