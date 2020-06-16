@@ -15,24 +15,39 @@ declare(strict_types=1);
  
 namespace Eren5960\BeautifulPM\tile;
  
+use Eren5960\BeautifulPM\utils\BellAttachments;
 use pocketmine\block\tile\Spawnable;
 use pocketmine\nbt\tag\CompoundTag;
 
 class Bell extends Spawnable{
-	public const BELL_ATTACHMENT = 'attachment';
-	/** @var string */
-	public $attachment = 'standing';
-	// TODO
+	public const TAG_ATTACHMENT = 'attachment';
 
-	public function readSaveData(CompoundTag $nbt) : void{
-		$this->attachment = $nbt->getString(self::BELL_ATTACHMENT, 'standing');
+	/** @var string */
+	protected $attachment = BellAttachments::DEFAULT;
+
+    public function readSaveData(CompoundTag $nbt) : void{
+		$this->attachment = $nbt->getString(self::TAG_ATTACHMENT, $this->attachment);
 	}
 
-	protected function writeSaveData(CompoundTag $nbt) : void{
-		$nbt->setString(self::BELL_ATTACHMENT, $this->attachment);
+    protected function writeSaveData(CompoundTag $nbt) : void{
+		$nbt->setString(self::TAG_ATTACHMENT, $this->attachment);
 	}
 
 	protected function addAdditionalSpawnData(CompoundTag $nbt) : void{
-		$nbt->setString(self::BELL_ATTACHMENT, $this->attachment);
+		$nbt->setString(self::TAG_ATTACHMENT, $this->attachment);
 	}
+
+    /**
+     * @return string
+     */
+    public function getAttachment(): string{
+        return $this->attachment;
+    }
+
+    /**
+     * @param string $attachment
+     */
+    public function setAttachment(string $attachment): void{
+        $this->attachment = $attachment;
+    }
 }

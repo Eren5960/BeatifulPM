@@ -9,18 +9,19 @@
  *
  * @author Eren5960
  * @link https://github.com/Eren5960
- * @date 05 Mayıs 2020
+ * @date 23 Mayıs 2020
  */
 declare(strict_types=1);
  
-namespace Eren5960\BeautifulPM\item;
+namespace Eren5960\BeautifulPM\utils;
  
-use pocketmine\block\BlockLegacyIds;
-use pocketmine\item\ItemBlock;
-use pocketmine\item\ItemIds;
+final class BellAttachments{
+    public const DEFAULT = self::STANDING;
 
-class Barrel extends ItemBlock{
-	public function __construct(int $meta = 0){
-		parent::__construct(BlockLegacyIds::BARREL, $meta, ItemIds::BARREL);
-	}
+    public const STANDING = "standing";
+    public const SIDE = "side";
+    public const MULTIPLE = "multiple";
+    public const HANGING = "hanging";
+
+    public function __construct(){}
 }

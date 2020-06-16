@@ -23,11 +23,9 @@ use Eren5960\BeautifulPM\block\Bell as BellBlock;
 use Eren5960\BeautifulPM\tile\Barrel as BarrelTile;
 use Eren5960\BeautifulPM\tile\Bell as BellTile;
 use Eren5960\BeautifulPM\item\TurtleShell;
-use pocketmine\block\BlockBreakInfo;
 use pocketmine\block\BlockFactory;
 use pocketmine\block\BlockIdentifier;
 use pocketmine\block\BlockLegacyIds;
-use pocketmine\block\BlockToolType;
 use pocketmine\block\Log;
 use pocketmine\block\tile\TileFactory;
 use pocketmine\block\utils\TreeType;
@@ -66,7 +64,7 @@ class Initer extends PluginBase implements Listener{
 
 	private static function initBlocks() : void{
 		$blocks = [
-			new BellBlock(new BlockIdentifier(BlockLegacyIds::BELL, 0, ItemIds::BELL, BellTile::class), 'Bell', BlockBreakInfo::instant()),
+			new BellBlock(new BlockIdentifier(BlockLegacyIds::BELL, 0, ItemIds::BELL, BellTile::class), 'Bell'),
 			new BarrelBlock(new BlockIdentifier(BlockLegacyIds::BARREL, 0, ItemIds::BARREL, BarrelTile::class))
 		];
 		foreach(TreeType::getAll() as $treeType){
