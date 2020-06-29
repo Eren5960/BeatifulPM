@@ -8,13 +8,13 @@
  * |_______)_|   |_____)_| |_(______/      |_|______/ \_____/
  *
  * @author Eren5960
- * @link https://github.com/Eren5960
- * @date 05 Mayıs 2020
+ * @link   https://github.com/Eren5960
+ * @date   05 Mayıs 2020
  */
 declare(strict_types=1);
- 
+
 namespace Eren5960\BeautifulPM\block;
- 
+
 use Eren5960\BeautifulPM\tile\Barrel as TileBarrel;
 use pocketmine\block\Block;
 use pocketmine\block\BlockBreakInfo;
@@ -38,16 +38,16 @@ class Barrel extends Opaque{
 		parent::__construct($idInfo, "Barrel", $breakInfo ?? new BlockBreakInfo(2.5, BlockToolType::AXE));
 	}
 
-	protected function writeStateToMeta() : int{
+	protected function writeStateToMeta(): int{
 		return BlockDataSerializer::writeFacing($this->facing) | ($this->open ? 0x01 : 0);
 	}
 
-	public function readStateFromData(int $id, int $stateMeta) : void{
+	public function readStateFromData(int $id, int $stateMeta): void{
 		$this->facing = BlockDataSerializer::readFacing($stateMeta);
 		$this->open = ($stateMeta & 0x01) !== 0;
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null): bool{
 		if($player !== null){
 			$this->facing = Facing::opposite(self::getBarrelFacing($player));
 		}
@@ -55,7 +55,7 @@ class Barrel extends Opaque{
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
+	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null): bool{
 		if($player instanceof Player){
 			$barrel = $this->pos->getWorldNonNull()->getTile($this->pos);
 			if($barrel instanceof TileBarrel){
@@ -77,15 +77,15 @@ class Barrel extends Opaque{
 		}
 	}
 
-	public function getFuelTime() : int{
+	public function getFuelTime(): int{
 		return 150;
 	}
 
-	public function getStateBitmask() : int{
+	public function getStateBitmask(): int{
 		return 0b111;
 	}
 
-	public static function getBarrelFacing(Player $player) : int{
+	public static function getBarrelFacing(Player $player): int{
 		$angle = $player->getLocation()->yaw % 360;
 		$pitch = $player->getLocation()->pitch % 90;
 

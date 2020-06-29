@@ -8,11 +8,11 @@
  * |_______)_|   |_____)_| |_(______/      |_|______/ \_____/
  *
  * @author Eren5960
- * @link https://github.com/Eren5960
- * @date 06 Mayıs 2020
+ * @link   https://github.com/Eren5960
+ * @date   06 Mayıs 2020
  */
 declare(strict_types=1);
- 
+
 namespace Eren5960\BeautifulPM\block;
 
 use pocketmine\block\Block;
@@ -34,15 +34,15 @@ class StrippedLog extends Opaque{
 		parent::__construct($idInfo, "Stripped " . $name, $breakInfo ?? new BlockBreakInfo(2.0, BlockToolType::AXE));
 	}
 
-	protected function writeStateToMeta() : int{
+	protected function writeStateToMeta(): int{
 		return BlockDataSerializer::writeFacing($this->facing);
 	}
 
-	public function readStateFromData(int $id, int $stateMeta) : void{
+	public function readStateFromData(int $id, int $stateMeta): void{
 		$this->facing = BlockDataSerializer::readFacing($stateMeta);
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null): bool{
 		if($player !== null){
 			$this->facing = $face <= 1 ? 0 : ($face > 3 ? 1 : 2);
 		}
@@ -50,15 +50,15 @@ class StrippedLog extends Opaque{
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}
 
-	public function getFuelTime() : int{
+	public function getFuelTime(): int{
 		return 300;
 	}
 
-	public function getFlameEncouragement() : int{
+	public function getFlameEncouragement(): int{
 		return 5;
 	}
 
-	public function getFlammability() : int{
+	public function getFlammability(): int{
 		return 5;
 	}
 }

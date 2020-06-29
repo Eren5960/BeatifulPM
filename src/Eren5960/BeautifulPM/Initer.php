@@ -8,8 +8,8 @@
  * |_______)_|   |_____)_| |_(______/      |_|______/ \_____/
  *
  * @author Eren5960
- * @link https://github.com/Eren5960
- * @date 02 Mayıs 2020
+ * @link   https://github.com/Eren5960
+ * @date   02 Mayıs 2020
  */
 declare(strict_types=1);
 
@@ -46,7 +46,7 @@ class Initer extends PluginBase implements Listener{
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 	}
 
-	private static function initItems() : void{
+	private static function initItems(): void{
 		$items = [
 			new Bell(0),
 			new TurtleShell(0),
@@ -62,40 +62,41 @@ class Initer extends PluginBase implements Listener{
 		}
 	}
 
-	private static function initBlocks() : void{
+	private static function initBlocks(): void{
 		$blocks = [
 			new BellBlock(new BlockIdentifier(BlockLegacyIds::BELL, 0, ItemIds::BELL, BellTile::class), 'Bell'),
 			new BarrelBlock(new BlockIdentifier(BlockLegacyIds::BARREL, 0, ItemIds::BARREL, BarrelTile::class))
 		];
 		foreach(TreeType::getAll() as $treeType){
 			$blocks[] = new StrippedLog(
-			    new BlockIdentifier(BlockLegacyIds::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(), 0, ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber()),
-                $treeType->getDisplayName() . ' Wood');
+				new BlockIdentifier(BlockLegacyIds::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(), 0, ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber()),
+				$treeType->getDisplayName() . ' Wood');
 		}
 		foreach($blocks as $block){
 			BlockFactory::getInstance()->register($block, true);
 		}
 	}
 
-	private static function initTiles() : void{
+	private static function initTiles(): void{
 		TileFactory::getInstance()->register(BellTile::class, ['Bell', 'minecraft:bell']);
 		TileFactory::getInstance()->register(BarrelTile::class, ['Barrel', 'minecraft:barrel']);
 	}
 
 	/**
 	 * @param PlayerInteractEvent $event
-	 * @priority HIGHEST
+	 *
+	 * @priority        HIGHEST
 	 * @handleCancelled false
 	 */
-	public function onInteract(PlayerInteractEvent $event) : void{
+	public function onInteract(PlayerInteractEvent $event): void{
 		$block = $event->getBlock();
 		if($event->getAction() === $event::RIGHT_CLICK_BLOCK && ($event->getItem() instanceof Axe && $block instanceof Log)){// stripe logs
 			$block->getPos()->getWorldNonNull()->setBlock($block->getPos(),
-                BlockFactory::getInstance()->get(
-			    BlockLegacyIds::STRIPPED_SPRUCE_LOG + ($block->getTreeType()->getMagicNumber() === 0 ? 5 : $block->getTreeType()->getMagicNumber() - 1)
-                ),
-                false
-            );
+				BlockFactory::getInstance()->get(
+					BlockLegacyIds::STRIPPED_SPRUCE_LOG + ($block->getTreeType()->getMagicNumber() === 0 ? 5 : $block->getTreeType()->getMagicNumber() - 1)
+				),
+				false
+			);
 		}
 	}
 }

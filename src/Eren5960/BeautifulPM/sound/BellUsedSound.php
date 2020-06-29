@@ -8,20 +8,20 @@
  * |_______)_|   |_____)_| |_(______/      |_|______/ \_____/
  *
  * @author Eren5960
- * @link https://github.com/Eren5960
- * @date 23 Mayıs 2020
+ * @link   https://github.com/Eren5960
+ * @date   23 Mayıs 2020
  */
 declare(strict_types=1);
- 
+
 namespace Eren5960\BeautifulPM\sound;
- 
+
 use pocketmine\math\Vector3;
 use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\world\sound\Sound;
 
-class BellUsedSound implements Sound {
+class BellUsedSound implements Sound{
 
-    public function encode(?Vector3 $pos){
-        return LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_BLOCK_BELL_HIT, $pos);
-    }
+	public function encode(?Vector3 $pos){
+		return LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_BLOCK_BELL_HIT, $pos);
+	}
 }

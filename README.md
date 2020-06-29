@@ -14,4 +14,4 @@ Supports new items in Minecraft: BE with this project.
 #### TODO
 - Campfire
 - Turtle Eggs
-- Others
+- Netherite Items (1.16.x)

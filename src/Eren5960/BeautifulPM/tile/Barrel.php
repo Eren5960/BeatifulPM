@@ -8,13 +8,13 @@
  * |_______)_|   |_____)_| |_(______/      |_|______/ \_____/
  *
  * @author Eren5960
- * @link https://github.com/Eren5960
- * @date 05 Mayıs 2020
+ * @link   https://github.com/Eren5960
+ * @date   05 Mayıs 2020
  */
 declare(strict_types=1);
- 
+
 namespace Eren5960\BeautifulPM\tile;
- 
+
 use Eren5960\BeautifulPM\inventory\BarrelInventory;
 use pocketmine\block\tile\Container;
 use pocketmine\block\tile\ContainerTrait;
@@ -26,7 +26,7 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\world\World;
 
 class Barrel extends Spawnable implements Container, Nameable{
-	use NameableTrait{
+	use NameableTrait {
 		addAdditionalSpawnData as addNameData;
 	}
 	use ContainerTrait;
@@ -47,21 +47,21 @@ class Barrel extends Spawnable implements Container, Nameable{
 		return $this->inventory;
 	}
 
-	public function getDefaultName() : string{
+	public function getDefaultName(): string{
 		return "Barrel";
 	}
 
-	public function readSaveData(CompoundTag $nbt) : void{
+	public function readSaveData(CompoundTag $nbt): void{
 		$this->loadName($nbt);
 		$this->loadItems($nbt);
 	}
 
-	protected function writeSaveData(CompoundTag $nbt) : void{
+	protected function writeSaveData(CompoundTag $nbt): void{
 		$this->saveName($nbt);
 		$this->saveItems($nbt);
 	}
 
-	protected function addAdditionalSpawnData(CompoundTag $nbt) : void{
+	protected function addAdditionalSpawnData(CompoundTag $nbt): void{
 		$this->addNameData($nbt);
 	}
 }

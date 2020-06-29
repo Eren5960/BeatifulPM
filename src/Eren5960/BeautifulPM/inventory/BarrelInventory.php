@@ -8,11 +8,11 @@
  * |_______)_|   |_____)_| |_(______/      |_|______/ \_____/
  *
  * @author Eren5960
- * @link https://github.com/Eren5960
- * @date 05 Mayıs 2020
+ * @link   https://github.com/Eren5960
+ * @date   05 Mayıs 2020
  */
 declare(strict_types=1);
- 
+
 namespace Eren5960\BeautifulPM\inventory;
 
 use Eren5960\BeautifulPM\sound\BarrelCloseSound;
@@ -22,11 +22,11 @@ use pocketmine\world\sound\Sound;
 
 class BarrelInventory extends ChestInventory{
 
-	protected function getOpenSound() : Sound{
+	protected function getOpenSound(): Sound{
 		return new BarrelOpenSound();
 	}
 
-	protected function getCloseSound() : Sound{
+	protected function getCloseSound(): Sound{
 		return new BarrelCloseSound();
 	}
 }
