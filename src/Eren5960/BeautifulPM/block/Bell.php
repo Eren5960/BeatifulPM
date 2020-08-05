@@ -44,8 +44,8 @@ class Bell extends Transparent{
 
 	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null): bool{
 		$pos = $this->getPos();
-		$pos->getWorldNonNull()->addSound($pos, new BellUsedSound());
-		$pos->getWorldNonNull()->broadcastPacketToViewers($pos, BlockEventPacket::create(EventPacket::TYPE_BELL_BLOCK_USED, 10000, $pos));
+		$pos->getWorld()->addSound($pos, new BellUsedSound());
+		$pos->getWorld()->broadcastPacketToViewers($pos, BlockEventPacket::create(EventPacket::TYPE_BELL_BLOCK_USED, 10000, $pos));
 		return true;
 	}
 
@@ -84,7 +84,7 @@ class Bell extends Transparent{
 	public function readStateFromWorld(): void{
 		parent::readStateFromWorld();
 
-		$tile = $this->pos->getWorldNonNull()->getTile($this->pos);
+		$tile = $this->pos->getWorld()->getTile($this->pos);
 		if($tile instanceof BellTile){
 			$this->attachment = $tile->getAttachment();
 		}
@@ -93,7 +93,7 @@ class Bell extends Transparent{
 	public function writeStateToWorld(): void{
 		parent::writeStateToWorld();
 
-		$tile = $this->pos->getWorldNonNull()->getTile($this->pos);
+		$tile = $this->pos->getWorld()->getTile($this->pos);
 		if($tile instanceof BellTile){
 			$tile->setAttachment($this->attachment);
 		}

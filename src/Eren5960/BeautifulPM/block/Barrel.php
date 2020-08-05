@@ -57,7 +57,7 @@ class Barrel extends Opaque{
 
 	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null): bool{
 		if($player instanceof Player){
-			$barrel = $this->pos->getWorldNonNull()->getTile($this->pos);
+			$barrel = $this->pos->getWorld()->getTile($this->pos);
 			if($barrel instanceof TileBarrel){
 				if(!$barrel->canOpenWith($item->getCustomName())){
 					return true;
@@ -73,7 +73,7 @@ class Barrel extends Opaque{
 	public function setOpen(bool $isOpen): void{
 		if($this->open !== $isOpen){ // don't works
 			$this->open = $isOpen;
-			$this->getPos()->getWorldNonNull()->setBlock($this->getPos(), $this);
+			$this->getPos()->getWorld()->setBlock($this->getPos(), $this);
 		}
 	}
 

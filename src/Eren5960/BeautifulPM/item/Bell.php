@@ -18,9 +18,10 @@ namespace Eren5960\BeautifulPM\item;
 use pocketmine\block\BlockLegacyIds;
 use pocketmine\item\ItemBlock;
 use pocketmine\item\ItemIds;
+use pocketmine\item\ItemIdentifier;
 
 class Bell extends ItemBlock{
 	public function __construct(int $meta = 0){
-		parent::__construct(BlockLegacyIds::BELL, $meta, ItemIds::BELL);
+		parent::__construct(BlockLegacyIds::BELL, $meta, new ItemIdentifier(ItemIds::BELL, 0));
 	}
 }

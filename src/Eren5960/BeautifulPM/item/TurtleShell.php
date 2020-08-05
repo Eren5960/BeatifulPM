@@ -19,9 +19,10 @@ use pocketmine\inventory\ArmorInventory;
 use pocketmine\item\Armor;
 use pocketmine\item\ArmorTypeInfo;
 use pocketmine\item\ItemIds;
+use pocketmine\item\ItemIdentifier;
 
 class TurtleShell extends Armor{
 	public function __construct(int $variant){
-		parent::__construct(ItemIds::TURTLE_HELMET, $variant, 'Turtle Shell', new ArmorTypeInfo(1, 56, ArmorInventory::SLOT_HEAD));
+		parent::__construct(new ItemIdentifier(ItemIds::TURTLE_HELMET, $variant), 'Turtle Shell', new ArmorTypeInfo(1, 56, ArmorInventory::SLOT_HEAD));
 	}
 }
