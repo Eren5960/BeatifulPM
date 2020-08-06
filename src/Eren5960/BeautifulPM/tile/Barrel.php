@@ -64,4 +64,12 @@ class Barrel extends Spawnable implements Container, Nameable{
 	protected function addAdditionalSpawnData(CompoundTag $nbt): void{
 		$this->addNameData($nbt);
 	}
+
+	public function close() : void{
+		if(!$this->closed){
+			$this->inventory->removeAllViewers();
+			$this->inventory = null;
+			parent::close();
+		}
+	}	
 }

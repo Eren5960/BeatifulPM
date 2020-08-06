@@ -30,7 +30,7 @@ use pocketmine\world\BlockTransaction;
 
 class Barrel extends Opaque{
 	/** @var int */
-	protected $facing = Facing::UP;
+	protected $facing = Facing::NORTH;
 	/** @var bool */
 	public $open = false; // what is open_bit
 
@@ -38,25 +38,51 @@ class Barrel extends Opaque{
 		parent::__construct($idInfo, "Barrel", $breakInfo ?? new BlockBreakInfo(2.5, BlockToolType::AXE));
 	}
 
-	protected function writeStateToMeta(): int{
-		return BlockDataSerializer::writeFacing($this->facing) | ($this->open ? 0x01 : 0);
+	protected function writeStateToMeta() : int{
+		return BlockDataSerializer::writeFacing($this->facing) | ($this->open ? 0x08 : 0);
 	}
 
-	public function readStateFromData(int $id, int $stateMeta): void{
-		$this->facing = BlockDataSerializer::readFacing($stateMeta);
-		$this->open = ($stateMeta & 0x01) !== 0;
+	public function readStateFromData(int $id, int $stateMeta) : void{
+		$this->facing = BlockDataSerializer::readFacing($stateMeta & 0x07);
+		$this->open = ($stateMeta & 0x08) === 0x08;
 	}
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null): bool{
+	public function getStateBitmask() : int{
+		return 0b1111;
+	}
+
+	public function isOpen() : bool{
+		return $this->open;
+	}
+
+	public function setOpen(bool $open) : void{
+		$this->open = $open;
+		$this->pos->getWorld()->setBlock($this->pos, $this);
+	}
+
+	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
 		if($player !== null){
-			$this->facing = Facing::opposite(self::getBarrelFacing($player));
+			if(abs($player->getLocation()->getX() - $this->pos->getX()) < 2 && abs($player->getLocation()->getZ() - $this->pos->getZ()) < 2){
+				$y = $player->getPosition()->getY() + $player->getEyeHeight();
+
+				if($y - $this->pos->getY() > 2){
+					$this->facing = Facing::UP;
+				}elseif($this->pos->getY() - $y > 0){
+					$this->facing = Facing::DOWN;
+				}else{
+					$this->facing = Facing::opposite($player->getHorizontalFacing());
+				}
+			}else{
+				$this->facing = Facing::opposite($player->getHorizontalFacing());
+			}
 		}
 
 		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
 	}
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null): bool{
+	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null) : bool{
 		if($player instanceof Player){
+
 			$barrel = $this->pos->getWorld()->getTile($this->pos);
 			if($barrel instanceof TileBarrel){
 				if(!$barrel->canOpenWith($item->getCustomName())){
@@ -70,47 +96,7 @@ class Barrel extends Opaque{
 		return true;
 	}
 
-	public function setOpen(bool $isOpen): void{
-		if($this->open !== $isOpen){ // don't works
-			$this->open = $isOpen;
-			$this->getPos()->getWorld()->setBlock($this->getPos(), $this);
-		}
-	}
-
 	public function getFuelTime(): int{
-		return 150;
-	}
-
-	public function getStateBitmask(): int{
-		return 0b111;
-	}
-
-	public static function getBarrelFacing(Player $player): int{
-		$angle = $player->getLocation()->yaw % 360;
-		$pitch = $player->getLocation()->pitch % 90;
-
-		if($angle < 0){
-			$angle += 360.0;
-		}
-
-		if($pitch > 54){
-			return Facing::DOWN;
-		}
-
-		if($pitch < -10){
-			return Facing::UP;
-		}
-
-		if((0 <= $angle and $angle < 45) or (315 <= $angle and $angle < 360)){
-			return Facing::SOUTH;
-		}
-		if(45 <= $angle and $angle < 135){
-			return Facing::WEST;
-		}
-		if(135 <= $angle and $angle < 225){
-			return Facing::NORTH;
-		}
-
-		return Facing::EAST;
+		return 300;
 	}
 }

@@ -19,6 +19,9 @@ use Eren5960\BeautifulPM\sound\BarrelCloseSound;
 use Eren5960\BeautifulPM\sound\BarrelOpenSound;
 use pocketmine\block\inventory\ChestInventory;
 use pocketmine\world\sound\Sound;
+use pocketmine\player\Player;
+use Eren5960\BeautifulPM\block\Barrel;
+use pocketmine\network\mcpe\protocol\BlockEventPacket;
 
 class BarrelInventory extends ChestInventory{
 
@@ -28,5 +31,39 @@ class BarrelInventory extends ChestInventory{
 
 	protected function getCloseSound(): Sound{
 		return new BarrelCloseSound();
+	}
+
+	public function onOpen(Player $who) : void{
+		parent::onOpen($who);
+
+		if(count($this->getViewers()) === 1 and $this->getHolder()->isValid()){
+			//TODO: this crap really shouldn't be managed by the inventory
+			$block = $this->getHolder()->getWorld()->getBlock($this->getHolder());
+			if($block instanceof Barrel){
+				$this->broadcastBlockEventPacket(true);
+				$block->setOpen(true);
+			}
+			$this->getHolder()->getWorld()->addSound($this->getHolder()->add(0.5, 0.5, 0.5), $this->getOpenSound());
+		}
+	}
+
+	public function onClose(Player $who) : void{
+		if(count($this->getViewers()) === 1 and $this->getHolder()->isValid()){
+			//TODO: this crap really shouldn't be managed by the inventory
+			$block = $this->getHolder()->getWorld()->getBlock($this->getHolder());
+			if($block instanceof Barrel){
+				$this->broadcastBlockEventPacket(false);
+				$block->setOpen(false);
+			}
+			$this->getHolder()->getWorld()->addSound($this->getHolder()->add(0.5, 0.5, 0.5), $this->getCloseSound());
+		}
+		parent::onClose($who);
+	}
+
+	protected function broadcastBlockEventPacket(bool $isOpen) : void{
+		$holder = $this->getHolder();
+
+		//event ID is always 1 for a chest
+		$holder->getWorld()->broadcastPacketToViewers($holder, BlockEventPacket::create(1, $isOpen ? 1 : 0, $holder->asVector3()));
 	}
 }
