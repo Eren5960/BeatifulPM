@@ -35,11 +35,10 @@ class Bell extends Transparent{
 	/** @var int */
 	public $facing = Facing::NORTH;
 	/** @var string */
-	public $attachment;
+	public $attachment = BellAttachments::DEFAULT;
 
 	public function __construct(BlockIdentifier $idInfo, string $name, BlockBreakInfo $breakInfo = null){
 		parent::__construct($idInfo, $name, $breakInfo ?? new BlockBreakInfo(5, BlockToolType::PICKAXE, 0, 5));
-		$this->attachment = BellAttachments::DEFAULT;
 	}
 
 	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null): bool{

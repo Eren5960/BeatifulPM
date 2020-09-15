@@ -29,22 +29,23 @@ use pocketmine\player\Player;
 use pocketmine\world\BlockTransaction;
 
 class Barrel extends Opaque{
+    public const BARREL_OPEN_BYTE = 0x08;
 	/** @var int */
 	protected $facing = Facing::NORTH;
 	/** @var bool */
-	public $open = false; // what is open_bit
+	public $open = false;
 
 	public function __construct(BlockIdentifier $idInfo, ?BlockBreakInfo $breakInfo = null){
 		parent::__construct($idInfo, "Barrel", $breakInfo ?? new BlockBreakInfo(2.5, BlockToolType::AXE));
 	}
 
 	protected function writeStateToMeta() : int{
-		return BlockDataSerializer::writeFacing($this->facing) | ($this->open ? 0x08 : 0);
+		return BlockDataSerializer::writeFacing($this->facing) | ($this->open ? self::BARREL_OPEN_BYTE : 0);
 	}
 
 	public function readStateFromData(int $id, int $stateMeta) : void{
 		$this->facing = BlockDataSerializer::readFacing($stateMeta & 0x07);
-		$this->open = ($stateMeta & 0x08) === 0x08;
+		$this->open = ($stateMeta & self::BARREL_OPEN_BYTE) === self::BARREL_OPEN_BYTE;
 	}
 
 	public function getStateBitmask() : int{
