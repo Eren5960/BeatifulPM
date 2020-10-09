@@ -1,7 +1,7 @@
 name: BeatifulPM
 version: 1
 api: 4.0.0
-main: Eren5960\BeautifulPM\Initer
+main: Eren5960\BeautifulPM\Loader
 author: Eren5960
 website: https://redmc.me
 descrition: So beatiful

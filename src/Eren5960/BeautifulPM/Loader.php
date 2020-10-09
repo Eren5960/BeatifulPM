@@ -17,15 +17,13 @@ namespace Eren5960\BeautifulPM;
 
 use Eren5960\BeautifulPM\block\Barrel as BarrelBlock;
 use Eren5960\BeautifulPM\block\StrippedLog;
-use Eren5960\BeautifulPM\item\Barrel;
-use Eren5960\BeautifulPM\item\Bell;
 use Eren5960\BeautifulPM\block\Bell as BellBlock;
 use Eren5960\BeautifulPM\tile\Barrel as BarrelTile;
 use Eren5960\BeautifulPM\tile\Bell as BellTile;
 use Eren5960\BeautifulPM\item\TurtleShell;
 use pocketmine\block\BlockFactory;
 use pocketmine\block\BlockIdentifier;
-use pocketmine\block\BlockLegacyIds;
+use pocketmine\block\BlockLegacyIds as Ids;
 use pocketmine\block\Log;
 use pocketmine\block\tile\TileFactory;
 use pocketmine\block\utils\TreeType;
@@ -39,22 +37,23 @@ use pocketmine\item\ItemIds;
 use pocketmine\plugin\PluginBase;
 use pocketmine\item\ItemIdentifier;
 
-class Initer extends PluginBase implements Listener{
+class Loader extends PluginBase implements Listener{
 	protected function onEnable(){
-		self::initItems();
+	    $bf = BlockFactory::getInstance();
 		self::initTiles();
-		self::initBlocks();
+		self::initBlocks($bf);
+        self::initItems($bf);
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 	}
 
-	private static function initItems(): void{
+	private static function initItems(BlockFactory $bf): void{
 		$items = [
-			new Bell(0),
+			new ItemBlock(new ItemIdentifier(ItemIds::BELL, 0), $bf->get(Ids::BELL)),
+            new ItemBlock(new ItemIdentifier(ItemIds::BARREL, 0), $bf->get(Ids::BARREL)),
 			new TurtleShell(0),
-			new Barrel(0)
 		];
 		foreach(TreeType::getAll() as $treeType){
-			$items[] = new ItemBlock(BlockLegacyIds::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(), 0, new ItemIdentifier(ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber(), 0));
+			$items[] = new ItemBlock(new ItemIdentifier(ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber(), 0), $bf->get(Ids::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(), 0));
 		}
 		foreach($items as $item){
 			ItemFactory::getInstance()->register($item, true);
@@ -62,18 +61,18 @@ class Initer extends PluginBase implements Listener{
 		}
 	}
 
-	private static function initBlocks(): void{
+	private static function initBlocks(BlockFactory $bf): void{
 		$blocks = [
-			new BellBlock(new BlockIdentifier(BlockLegacyIds::BELL, 0, ItemIds::BELL, BellTile::class), 'Bell'),
-			new BarrelBlock(new BlockIdentifier(BlockLegacyIds::BARREL, 0, ItemIds::BARREL, BarrelTile::class))
+			new BellBlock(new BlockIdentifier(Ids::BELL, 0, ItemIds::BELL, BellTile::class), 'Bell'),
+			new BarrelBlock(new BlockIdentifier(Ids::BARREL, 0, ItemIds::BARREL, BarrelTile::class))
 		];
 		foreach(TreeType::getAll() as $treeType){
 			$blocks[] = new StrippedLog(
-				new BlockIdentifier(BlockLegacyIds::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(), 0, ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber()),
+				new BlockIdentifier(Ids::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(), 0, ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber()),
 				$treeType->getDisplayName() . ' Wood');
 		}
 		foreach($blocks as $block){
-			BlockFactory::getInstance()->register($block, true);
+            $bf->register($block, true);
 		}
 	}
 
@@ -93,7 +92,7 @@ class Initer extends PluginBase implements Listener{
 		if($event->getAction() === $event::RIGHT_CLICK_BLOCK && ($event->getItem() instanceof Axe && $block instanceof Log)){// stripe logs
 			$block->getPos()->getWorld()->setBlock($block->getPos(),
 				BlockFactory::getInstance()->get(
-					BlockLegacyIds::STRIPPED_SPRUCE_LOG + ($block->getTreeType()->getMagicNumber() === 0 ? 5 : $block->getTreeType()->getMagicNumber() - 1)
+					Ids::STRIPPED_SPRUCE_LOG + ($block->getTreeType()->getMagicNumber() === 0 ? 5 : $block->getTreeType()->getMagicNumber() - 1)
 				),
 				false
 			);
