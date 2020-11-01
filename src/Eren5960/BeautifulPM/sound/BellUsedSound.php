@@ -21,7 +21,7 @@ use pocketmine\world\sound\Sound;
 
 class BellUsedSound implements Sound{
 
-	public function encode(?Vector3 $pos){
-		return LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_BLOCK_BELL_HIT, $pos);
+	public function encode(?Vector3 $pos): array{
+		return [LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_BLOCK_BELL_HIT, $pos)];
 	}
 }

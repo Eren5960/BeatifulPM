@@ -21,7 +21,7 @@ use pocketmine\world\sound\Sound;
 
 class BarrelOpenSound implements Sound{
 
-	public function encode(?Vector3 $pos){
-		return LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_BLOCK_BARREL_OPEN, $pos);
+	public function encode(?Vector3 $pos): array{
+		return [LevelSoundEventPacket::create(LevelSoundEventPacket::SOUND_BLOCK_BARREL_OPEN, $pos)];
 	}
 }
