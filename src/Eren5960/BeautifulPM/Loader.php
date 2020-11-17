@@ -15,10 +15,8 @@ declare(strict_types=1);
 
 namespace Eren5960\BeautifulPM;
 
-use Eren5960\BeautifulPM\block\Barrel as BarrelBlock;
 use Eren5960\BeautifulPM\block\StrippedLog;
 use Eren5960\BeautifulPM\block\Bell as BellBlock;
-use Eren5960\BeautifulPM\tile\Barrel as BarrelTile;
 use Eren5960\BeautifulPM\tile\Bell as BellTile;
 use Eren5960\BeautifulPM\item\TurtleShell;
 use pocketmine\block\BlockFactory;
@@ -49,7 +47,6 @@ class Loader extends PluginBase implements Listener{
 	private static function initItems(BlockFactory $bf): void{
 		$items = [
 			new ItemBlock(new ItemIdentifier(ItemIds::BELL, 0), $bf->get(Ids::BELL)),
-            new ItemBlock(new ItemIdentifier(ItemIds::BARREL, 0), $bf->get(Ids::BARREL)),
 			new TurtleShell(0),
 		];
 		foreach(TreeType::getAll() as $treeType){
@@ -63,8 +60,7 @@ class Loader extends PluginBase implements Listener{
 
 	private static function initBlocks(BlockFactory $bf): void{
 		$blocks = [
-			new BellBlock(new BlockIdentifier(Ids::BELL, 0, ItemIds::BELL, BellTile::class), 'Bell'),
-			new BarrelBlock(new BlockIdentifier(Ids::BARREL, 0, ItemIds::BARREL, BarrelTile::class))
+			new BellBlock(new BlockIdentifier(Ids::BELL, 0, ItemIds::BELL, BellTile::class), 'Bell')
 		];
 		foreach(TreeType::getAll() as $treeType){
 			$blocks[] = new StrippedLog(
@@ -78,7 +74,6 @@ class Loader extends PluginBase implements Listener{
 
 	private static function initTiles(): void{
 		TileFactory::getInstance()->register(BellTile::class, ['Bell', 'minecraft:bell']);
-		TileFactory::getInstance()->register(BarrelTile::class, ['Barrel', 'minecraft:barrel']);
 	}
 
 	/**
