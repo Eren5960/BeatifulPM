@@ -87,7 +87,7 @@ class Loader extends PluginBase implements Listener{
 		if($event->getAction() === $event::RIGHT_CLICK_BLOCK && ($event->getItem() instanceof Axe && $block instanceof Log)){// stripe logs
 			$block->getPos()->getWorld()->setBlock($block->getPos(),
 				BlockFactory::getInstance()->get(
-					Ids::STRIPPED_SPRUCE_LOG + ($block->getTreeType()->getMagicNumber() === 0 ? 5 : $block->getTreeType()->getMagicNumber() - 1)
+					Ids::STRIPPED_SPRUCE_LOG + ($block->getTreeType()->getMagicNumber() === 0 ? 5 : $block->getTreeType()->getMagicNumber() - 1), 0
 				),
 				false
 			);
