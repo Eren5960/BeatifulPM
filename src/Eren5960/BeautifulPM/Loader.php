@@ -46,7 +46,7 @@ class Loader extends PluginBase implements Listener{
 
 	private static function initItems(BlockFactory $bf): void{
 		$items = [
-			new ItemBlock(new ItemIdentifier(ItemIds::BELL, 0), $bf->get(Ids::BELL)),
+			new ItemBlock(new ItemIdentifier(ItemIds::BELL, 0), $bf->get(Ids::BELL, 0)),
 			new TurtleShell(0),
 		];
 		foreach(TreeType::getAll() as $treeType){
