@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace Eren5960\BeautifulPM;
 
+use Eren5960\BeautifulPM\block\Composter;
 use Eren5960\BeautifulPM\block\StrippedLog;
 use Eren5960\BeautifulPM\block\Bell as BellBlock;
 use Eren5960\BeautifulPM\tile\Bell as BellTile;
@@ -48,6 +49,7 @@ class Loader extends PluginBase implements Listener{
 		$items = [
 			new ItemBlock(new ItemIdentifier(ItemIds::BELL, 0), $bf->get(Ids::BELL, 0)),
 			new TurtleShell(0),
+            new ItemBlock(new ItemIdentifier(ItemIds::COMPOSTER, 0), $bf->get(Ids::COMPOSTER, 0)),
 		];
 		foreach(TreeType::getAll() as $treeType){
 			$items[] = new ItemBlock(new ItemIdentifier(ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber(), 0), $bf->get(Ids::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(), 0));
@@ -60,7 +62,8 @@ class Loader extends PluginBase implements Listener{
 
 	private static function initBlocks(BlockFactory $bf): void{
 		$blocks = [
-			new BellBlock(new BlockIdentifier(Ids::BELL, 0, ItemIds::BELL, BellTile::class), 'Bell')
+			new BellBlock(new BlockIdentifier(Ids::BELL, 0, ItemIds::BELL, BellTile::class), 'Bell'),
+            new Composter(new BlockIdentifier(Ids::COMPOSTER, 0, ItemIds::COMPOSTER), "Composter")
 		];
 		foreach(TreeType::getAll() as $treeType){
 			$blocks[] = new StrippedLog(

@@ -4,7 +4,7 @@ Supports new items in Minecraft: BE with this project.
 ***Important Note: This plugin only works for 4.0.0 API.***
 
 ### Finished
-- Barrel
+- Composter
 - Stripped Woods
 - Turtle Shell
 
@@ -14,4 +14,4 @@ Supports new items in Minecraft: BE with this project.
 #### TODO
 - Campfire
 - Turtle Eggs
-- Netherite Items (1.16.x)
+- Soul Torch
