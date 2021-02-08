@@ -37,7 +37,7 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\item\ItemIdentifier;
 
 class Loader extends PluginBase implements Listener{
-	protected function onEnable(){
+	protected function onEnable(): void{
 	    $bf = BlockFactory::getInstance();
 		self::initTiles();
 		self::initBlocks($bf);
