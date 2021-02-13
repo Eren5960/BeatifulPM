@@ -30,6 +30,7 @@ use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\inventory\CreativeInventory;
 use pocketmine\item\Axe;
+use pocketmine\item\Item;
 use pocketmine\item\ItemBlock;
 use pocketmine\item\ItemFactory;
 use pocketmine\item\ItemIds;
@@ -56,9 +57,15 @@ class Loader extends PluginBase implements Listener{
 		}
 		foreach($items as $item){
 			ItemFactory::getInstance()->register($item, true);
-			CreativeInventory::getInstance()->add($item);
+			self::addItemsToCreativeInventory($item, [408, 422]);
 		}
 	}
+
+    public static function addItemsToCreativeInventory(Item $item, array $protocols): void{
+        foreach ($protocols as $protocol) {
+            CreativeInventory::getInstance($protocol)->add($item);
+        }
+    }
 
 	private static function initBlocks(BlockFactory $bf): void{
 		$blocks = [
