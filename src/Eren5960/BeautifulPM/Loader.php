@@ -37,70 +37,121 @@ use pocketmine\item\ItemIds;
 use pocketmine\plugin\PluginBase;
 use pocketmine\item\ItemIdentifier;
 
-class Loader extends PluginBase implements Listener{
-	protected function onEnable(): void{
-	    $bf = BlockFactory::getInstance();
-		self::initTiles();
-		self::initBlocks($bf);
+class Loader extends PluginBase implements Listener {
+    protected function onEnable(): void {
+        $bf = BlockFactory::getInstance();
+        self::initTiles();
+        self::initBlocks($bf);
         self::initItems($bf);
-		$this->getServer()->getPluginManager()->registerEvents($this, $this);
-	}
+        $this->getServer()
+            ->getPluginManager()
+            ->registerEvents($this, $this);
+    }
 
-	private static function initItems(BlockFactory $bf): void{
-		$items = [
-			new ItemBlock(new ItemIdentifier(ItemIds::BELL, 0), $bf->get(Ids::BELL, 0)),
-			new TurtleShell(0),
-            new ItemBlock(new ItemIdentifier(ItemIds::COMPOSTER, 0), $bf->get(Ids::COMPOSTER, 0)),
-		];
-		foreach(TreeType::getAll() as $treeType){
-			$items[] = new ItemBlock(new ItemIdentifier(ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber(), 0), $bf->get(Ids::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(), 0));
-		}
-		foreach($items as $item){
-			ItemFactory::getInstance()->register($item, true);
-			self::addItemsToCreativeInventory($item, [408, 422]);
-		}
-	}
+    private static function initItems(BlockFactory $bf): void {
+        $items = [
+            new ItemBlock(
+                new ItemIdentifier(ItemIds::BELL, 0),
+                $bf->get(Ids::BELL, 0)
+            ),
+            new TurtleShell(0),
+            new ItemBlock(
+                new ItemIdentifier(ItemIds::COMPOSTER, 0),
+                $bf->get(Ids::COMPOSTER, 0)
+            )
+        ];
+        foreach (TreeType::getAll() as $treeType) {
+            $items[] = new ItemBlock(
+                new ItemIdentifier(
+                    ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber(),
+                    0
+                ),
+                $bf->get(
+                    Ids::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(),
+                    0
+                )
+            );
+        }
+        foreach ($items as $item) {
+            ItemFactory::getInstance()->register($item, true);
+            self::addItemsToCreativeInventory($item, [408, 422]);
+        }
+    }
 
-    public static function addItemsToCreativeInventory(Item $item, array $protocols): void{
+    public static function addItemsToCreativeInventory(
+        Item $item,
+        array $protocols
+    ): void {
         foreach ($protocols as $protocol) {
             CreativeInventory::getInstance($protocol)->add($item);
         }
     }
 
-	private static function initBlocks(BlockFactory $bf): void{
-		$blocks = [
-			new BellBlock(new BlockIdentifier(Ids::BELL, 0, ItemIds::BELL, BellTile::class), 'Bell'),
-            new Composter(new BlockIdentifier(Ids::COMPOSTER, 0, ItemIds::COMPOSTER), "Composter")
-		];
-		foreach(TreeType::getAll() as $treeType){
-			$blocks[] = new StrippedLog(
-				new BlockIdentifier(Ids::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(), 0, ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber()),
-				$treeType->getDisplayName() . ' Wood');
-		}
-		foreach($blocks as $block){
+    private static function initBlocks(BlockFactory $bf): void {
+        $blocks = [
+            new BellBlock(
+                new BlockIdentifier(
+                    Ids::BELL,
+                    0,
+                    ItemIds::BELL,
+                    BellTile::class
+                ),
+                'Bell'
+            ),
+            new Composter(
+                new BlockIdentifier(Ids::COMPOSTER, 0, ItemIds::COMPOSTER),
+                'Composter'
+            )
+        ];
+        foreach (TreeType::getAll() as $treeType) {
+            $blocks[] = new StrippedLog(
+                new BlockIdentifier(
+                    Ids::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(),
+                    0,
+                    ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber()
+                ),
+                $treeType->getDisplayName() . ' Wood'
+            );
+        }
+        foreach ($blocks as $block) {
             $bf->register($block, true);
-		}
-	}
+        }
+    }
 
-	private static function initTiles(): void{
-		TileFactory::getInstance()->register(BellTile::class, ['Bell', 'minecraft:bell']);
-	}
+    private static function initTiles(): void {
+        TileFactory::getInstance()->register(BellTile::class, [
+            'Bell',
+            'minecraft:bell'
+        ]);
+    }
 
-	/**
-	 * @param PlayerInteractEvent $event
-	 *
-	 * @priority        HIGHEST
-	 * @handleCancelled false
-	 */
-	public function onInteract(PlayerInteractEvent $event): void{
-		$block = $event->getBlock();
-		if($event->getAction() === $event::RIGHT_CLICK_BLOCK && ($event->getItem() instanceof Axe && $block instanceof Log)){// stripe logs
-			$block->getPos()->getWorld()->setBlock($block->getPos(),
-				BlockFactory::getInstance()->get(
-					Ids::STRIPPED_SPRUCE_LOG + ($block->getTreeType()->getMagicNumber() === 0 ? 5 : $block->getTreeType()->getMagicNumber() - 1), 0
-				),
-				false
-			);
-		}
-	}
+    /**
+     * @param PlayerInteractEvent $event
+     *
+     * @priority        HIGHEST
+     * @handleCancelled false
+     */
+    public function onInteract(PlayerInteractEvent $event): void {
+        $block = $event->getBlock();
+        if (
+            $event->getAction() === $event::RIGHT_CLICK_BLOCK &&
+            ($event->getItem() instanceof Axe && $block instanceof Log)
+        ) {
+            // stripe logs
+            $block
+                ->getPos()
+                ->getWorld()
+                ->setBlock(
+                    $block->getPos(),
+                    BlockFactory::getInstance()->get(
+                        Ids::STRIPPED_SPRUCE_LOG +
+                            ($block->getTreeType()->getMagicNumber() === 0
+                                ? 5
+                                : $block->getTreeType()->getMagicNumber() - 1),
+                        0
+                    ),
+                    false
+                );
+        }
+    }
 }

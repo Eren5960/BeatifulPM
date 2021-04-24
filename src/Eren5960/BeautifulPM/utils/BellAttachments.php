@@ -15,14 +15,14 @@ declare(strict_types=1);
 
 namespace Eren5960\BeautifulPM\utils;
 
-final class BellAttachments{
-	public const DEFAULT = self::STANDING;
+final class BellAttachments {
+    public const DEFAULT = self::STANDING;
 
-	public const STANDING = "standing";
-	public const SIDE = "side";
-	public const MULTIPLE = "multiple";
-	public const HANGING = "hanging";
+    public const STANDING = 'standing';
+    public const SIDE = 'side';
+    public const MULTIPLE = 'multiple';
+    public const HANGING = 'hanging';
 
-	public function __construct(){
-	}
+    public function __construct() {
+    }
 }

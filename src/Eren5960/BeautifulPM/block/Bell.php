@@ -31,70 +31,112 @@ use pocketmine\network\mcpe\protocol\EventPacket;
 use pocketmine\player\Player;
 use pocketmine\world\BlockTransaction;
 
-class Bell extends Transparent{
-	/** @var int */
-	public $facing = Facing::NORTH;
-	/** @var string */
-	public $attachment = BellAttachments::DEFAULT;
+class Bell extends Transparent {
+    /** @var int */
+    public $facing = Facing::NORTH;
+    /** @var string */
+    public $attachment = BellAttachments::DEFAULT;
 
-	public function __construct(BlockIdentifier $idInfo, string $name, BlockBreakInfo $breakInfo = null){
-		parent::__construct($idInfo, $name, $breakInfo ?? new BlockBreakInfo(5, BlockToolType::PICKAXE, 0, 5));
-	}
+    public function __construct(
+        BlockIdentifier $idInfo,
+        string $name,
+        BlockBreakInfo $breakInfo = null
+    ) {
+        parent::__construct(
+            $idInfo,
+            $name,
+            $breakInfo ?? new BlockBreakInfo(5, BlockToolType::PICKAXE, 0, 5)
+        );
+    }
 
-	public function onInteract(Item $item, int $face, Vector3 $clickVector, ?Player $player = null): bool{
-		$pos = $this->getPos();
-		$pos->getWorld()->addSound($pos, new BellUsedSound());
-		$pos->getWorld()->broadcastPacketToViewers($pos, BlockEventPacket::create(EventPacket::TYPE_BELL_BLOCK_USED, 10000, $pos));
-		return true;
-	}
+    public function onInteract(
+        Item $item,
+        int $face,
+        Vector3 $clickVector,
+        ?Player $player = null
+    ): bool {
+        $pos = $this->getPos();
+        $pos->getWorld()->addSound($pos, new BellUsedSound());
+        $pos->getWorld()->broadcastPacketToViewers(
+            $pos,
+            BlockEventPacket::create(
+                EventPacket::TYPE_BELL_BLOCK_USED,
+                10000,
+                $pos
+            )
+        );
+        return true;
+    }
 
-	protected function writeStateToMeta(): int{
-		return $this->facing << 1;
-	}
+    protected function writeStateToMeta(): int {
+        return $this->facing << 1;
+    }
 
-	public function readStateFromData(int $id, int $stateMeta): void{
-		$this->facing = $stateMeta;
-	}
+    public function readStateFromData(int $id, int $stateMeta): void {
+        $this->facing = $stateMeta;
+    }
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null): bool{
-		if($player !== null){
-			$this->facing = Facing::opposite($player->getHorizontalFacing());
-		}
+    public function place(
+        BlockTransaction $tx,
+        Item $item,
+        Block $blockReplace,
+        Block $blockClicked,
+        int $face,
+        Vector3 $clickVector,
+        ?Player $player = null
+    ): bool {
+        if ($player !== null) {
+            $this->facing = Facing::opposite($player->getHorizontalFacing());
+        }
 
-		$isEast = $blockReplace->getSide(Facing::EAST)->getId() !== 0;
-		$isWest = $blockReplace->getSide(Facing::WEST)->getId() !== 0;
+        $isEast = $blockReplace->getSide(Facing::EAST)->getId() !== 0;
+        $isWest = $blockReplace->getSide(Facing::WEST)->getId() !== 0;
 
-		$isSouth = $blockReplace->getSide(Facing::SOUTH)->getId() !== 0;
-		$isNorth = $blockReplace->getSide(Facing::NORTH)->getId() !== 0;
+        $isSouth = $blockReplace->getSide(Facing::SOUTH)->getId() !== 0;
+        $isNorth = $blockReplace->getSide(Facing::NORTH)->getId() !== 0;
 
-		$isUp = $blockReplace->getSide(Facing::UP)->getId() !== 0;
+        $isUp = $blockReplace->getSide(Facing::UP)->getId() !== 0;
 
-		if($isUp){
-			$this->attachment = BellAttachments::HANGING;
-		}elseif($isEast || $isWest){
-			$this->attachment = $isEast && $isWest ? BellAttachments::MULTIPLE : BellAttachments::SIDE;
-		}elseif($isSouth || $isNorth){
-			$this->attachment = $isSouth && $isNorth ? BellAttachments::MULTIPLE : BellAttachments::SIDE;
-		}
+        if ($isUp) {
+            $this->attachment = BellAttachments::HANGING;
+        } elseif ($isEast || $isWest) {
+            $this->attachment =
+                $isEast && $isWest
+                    ? BellAttachments::MULTIPLE
+                    : BellAttachments::SIDE;
+        } elseif ($isSouth || $isNorth) {
+            $this->attachment =
+                $isSouth && $isNorth
+                    ? BellAttachments::MULTIPLE
+                    : BellAttachments::SIDE;
+        }
 
-		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
-	}
+        return parent::place(
+            $tx,
+            $item,
+            $blockReplace,
+            $blockClicked,
+            $face,
+            $clickVector,
+            $player
+        );
+    }
 
-	public function readStateFromWorld(): void{
-		parent::readStateFromWorld();
+    public function readStateFromWorld(): void {
+        parent::readStateFromWorld();
 
-		$tile = $this->pos->getWorld()->getTile($this->pos);
-		if($tile instanceof BellTile){
-			$this->attachment = $tile->getAttachment();
-		}
-	}
+        $tile = $this->pos->getWorld()->getTile($this->pos);
+        if ($tile instanceof BellTile) {
+            $this->attachment = $tile->getAttachment();
+        }
+    }
 
-	public function writeStateToWorld(): void{
-		parent::writeStateToWorld();
+    public function writeStateToWorld(): void {
+        parent::writeStateToWorld();
 
-		$tile = $this->pos->getWorld()->getTile($this->pos);
-		if($tile instanceof BellTile){
-			$tile->setAttachment($this->attachment);
-		}
-	}
+        $tile = $this->pos->getWorld()->getTile($this->pos);
+        if ($tile instanceof BellTile) {
+            $tile->setAttachment($this->attachment);
+        }
+    }
 }

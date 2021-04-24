@@ -27,38 +27,62 @@ use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 use pocketmine\world\BlockTransaction;
 
-class StrippedLog extends Opaque{
-	public $facing = Facing::UP;
+class StrippedLog extends Opaque {
+    public $facing = Facing::UP;
 
-	public function __construct(BlockIdentifier $idInfo, string $name, ?BlockBreakInfo $breakInfo = null){
-		parent::__construct($idInfo, "Stripped " . $name, $breakInfo ?? new BlockBreakInfo(2.0, BlockToolType::AXE));
-	}
+    public function __construct(
+        BlockIdentifier $idInfo,
+        string $name,
+        ?BlockBreakInfo $breakInfo = null
+    ) {
+        parent::__construct(
+            $idInfo,
+            'Stripped ' . $name,
+            $breakInfo ?? new BlockBreakInfo(2.0, BlockToolType::AXE)
+        );
+    }
 
-	protected function writeStateToMeta(): int{
-		return BlockDataSerializer::writeFacing($this->facing);
-	}
+    protected function writeStateToMeta(): int {
+        return BlockDataSerializer::writeFacing($this->facing);
+    }
 
-	public function readStateFromData(int $id, int $stateMeta): void{
-		$this->facing = BlockDataSerializer::readFacing($stateMeta);
-	}
+    public function readStateFromData(int $id, int $stateMeta): void {
+        $this->facing = BlockDataSerializer::readFacing($stateMeta);
+    }
 
-	public function place(BlockTransaction $tx, Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, ?Player $player = null): bool{
-		if($player !== null){
-			$this->facing = $face <= 1 ? 0 : ($face > 3 ? 1 : 2);
-		}
+    public function place(
+        BlockTransaction $tx,
+        Item $item,
+        Block $blockReplace,
+        Block $blockClicked,
+        int $face,
+        Vector3 $clickVector,
+        ?Player $player = null
+    ): bool {
+        if ($player !== null) {
+            $this->facing = $face <= 1 ? 0 : ($face > 3 ? 1 : 2);
+        }
 
-		return parent::place($tx, $item, $blockReplace, $blockClicked, $face, $clickVector, $player);
-	}
+        return parent::place(
+            $tx,
+            $item,
+            $blockReplace,
+            $blockClicked,
+            $face,
+            $clickVector,
+            $player
+        );
+    }
 
-	public function getFuelTime(): int{
-		return 300;
-	}
+    public function getFuelTime(): int {
+        return 300;
+    }
 
-	public function getFlameEncouragement(): int{
-		return 5;
-	}
+    public function getFlameEncouragement(): int {
+        return 5;
+    }
 
-	public function getFlammability(): int{
-		return 5;
-	}
+    public function getFlammability(): int {
+        return 5;
+    }
 }

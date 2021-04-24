@@ -18,7 +18,7 @@ class ComposterRate {
             ItemIds::PUMPKIN_SEEDS,
             ItemIds::SAPLING,
             ItemIds::SEAGRASS,
-           // Grass but not block
+            // Grass but not block
             ItemIds::SWEET_BERRIES,
             ItemIds::WHEAT_SEEDS
         ],
@@ -60,17 +60,16 @@ class ComposterRate {
             ItemIds::RED_MUSHROOM_BLOCK,
             ItemIds::NETHER_WART_BLOCK
         ],
-        100 => [
-            ItemIds::CAKE,
-            ItemIds::PUMPKIN_PIE
-        ]
+        100 => [ItemIds::CAKE, ItemIds::PUMPKIN_PIE]
     ];
 
     /** @var int|null[] */
     public static $rateCache = [];
 
-    public static function getRate(Item $item): ?int{
-        if (isset(self::$rateCache[$item->getId()])) return self::$rateCache[$item->getId()];
+    public static function getRate(Item $item): ?int {
+        if (isset(self::$rateCache[$item->getId()])) {
+            return self::$rateCache[$item->getId()];
+        }
         foreach (self::DATA as $rate => $data) {
             if (in_array($item->getId(), $data)) {
                 return self::$rateCache[$item->getId()] = $rate;

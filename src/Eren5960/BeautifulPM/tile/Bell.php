@@ -19,35 +19,38 @@ use Eren5960\BeautifulPM\utils\BellAttachments;
 use pocketmine\block\tile\Spawnable;
 use pocketmine\nbt\tag\CompoundTag;
 
-class Bell extends Spawnable{
-	public const TAG_ATTACHMENT = 'attachment';
+class Bell extends Spawnable {
+    public const TAG_ATTACHMENT = 'attachment';
 
-	/** @var string */
-	protected $attachment = BellAttachments::DEFAULT;
+    /** @var string */
+    protected $attachment = BellAttachments::DEFAULT;
 
-	public function readSaveData(CompoundTag $nbt): void{
-		$this->attachment = $nbt->getString(self::TAG_ATTACHMENT, $this->attachment);
-	}
+    public function readSaveData(CompoundTag $nbt): void {
+        $this->attachment = $nbt->getString(
+            self::TAG_ATTACHMENT,
+            $this->attachment
+        );
+    }
 
-	protected function writeSaveData(CompoundTag $nbt): void{
-		$nbt->setString(self::TAG_ATTACHMENT, $this->attachment);
-	}
+    protected function writeSaveData(CompoundTag $nbt): void {
+        $nbt->setString(self::TAG_ATTACHMENT, $this->attachment);
+    }
 
-	protected function addAdditionalSpawnData(CompoundTag $nbt): void{
-		$nbt->setString(self::TAG_ATTACHMENT, $this->attachment);
-	}
+    protected function addAdditionalSpawnData(CompoundTag $nbt): void {
+        $nbt->setString(self::TAG_ATTACHMENT, $this->attachment);
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getAttachment(): string{
-		return $this->attachment;
-	}
+    /**
+     * @return string
+     */
+    public function getAttachment(): string {
+        return $this->attachment;
+    }
 
-	/**
-	 * @param string $attachment
-	 */
-	public function setAttachment(string $attachment): void{
-		$this->attachment = $attachment;
-	}
+    /**
+     * @param string $attachment
+     */
+    public function setAttachment(string $attachment): void {
+        $this->attachment = $attachment;
+    }
 }
