@@ -16,20 +16,15 @@ declare(strict_types=1);
 namespace Eren5960\BeautifulPM;
 
 use Eren5960\BeautifulPM\block\Composter;
-use Eren5960\BeautifulPM\block\StrippedLog;
 use Eren5960\BeautifulPM\block\Bell as BellBlock;
 use Eren5960\BeautifulPM\tile\Bell as BellTile;
 use Eren5960\BeautifulPM\item\TurtleShell;
 use pocketmine\block\BlockFactory;
 use pocketmine\block\BlockIdentifier;
 use pocketmine\block\BlockLegacyIds as Ids;
-use pocketmine\block\Log;
 use pocketmine\block\tile\TileFactory;
-use pocketmine\block\utils\TreeType;
 use pocketmine\event\Listener;
-use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\inventory\CreativeInventory;
-use pocketmine\item\Axe;
 use pocketmine\item\Item;
 use pocketmine\item\ItemBlock;
 use pocketmine\item\ItemFactory;
@@ -43,9 +38,6 @@ class Loader extends PluginBase implements Listener {
         self::initTiles();
         self::initBlocks($bf);
         self::initItems($bf);
-        $this->getServer()
-            ->getPluginManager()
-            ->registerEvents($this, $this);
     }
 
     private static function initItems(BlockFactory $bf): void {
@@ -60,21 +52,10 @@ class Loader extends PluginBase implements Listener {
                 $bf->get(Ids::COMPOSTER, 0)
             )
         ];
-        foreach (TreeType::getAll() as $treeType) {
-            $items[] = new ItemBlock(
-                new ItemIdentifier(
-                    ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber(),
-                    0
-                ),
-                $bf->get(
-                    Ids::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(),
-                    0
-                )
-            );
-        }
+
         foreach ($items as $item) {
             ItemFactory::getInstance()->register($item, true);
-            self::addItemsToCreativeInventory($item, [408, 422]);
+            self::addItemsToCreativeInventory($item, [408, 422, 428, 431]);
         }
     }
 
@@ -103,16 +84,6 @@ class Loader extends PluginBase implements Listener {
                 'Composter'
             )
         ];
-        foreach (TreeType::getAll() as $treeType) {
-            $blocks[] = new StrippedLog(
-                new BlockIdentifier(
-                    Ids::STRIPPED_SPRUCE_LOG + $treeType->getMagicNumber(),
-                    0,
-                    ItemIds::STRIPPED_SPRUCE_LOG - $treeType->getMagicNumber()
-                ),
-                $treeType->getDisplayName() . ' Wood'
-            );
-        }
         foreach ($blocks as $block) {
             $bf->register($block, true);
         }
@@ -123,35 +94,5 @@ class Loader extends PluginBase implements Listener {
             'Bell',
             'minecraft:bell'
         ]);
-    }
-
-    /**
-     * @param PlayerInteractEvent $event
-     *
-     * @priority        HIGHEST
-     * @handleCancelled false
-     */
-    public function onInteract(PlayerInteractEvent $event): void {
-        $block = $event->getBlock();
-        if (
-            $event->getAction() === $event::RIGHT_CLICK_BLOCK &&
-            ($event->getItem() instanceof Axe && $block instanceof Log)
-        ) {
-            // stripe logs
-            $block
-                ->getPos()
-                ->getWorld()
-                ->setBlock(
-                    $block->getPos(),
-                    BlockFactory::getInstance()->get(
-                        Ids::STRIPPED_SPRUCE_LOG +
-                            ($block->getTreeType()->getMagicNumber() === 0
-                                ? 5
-                                : $block->getTreeType()->getMagicNumber() - 1),
-                        0
-                    ),
-                    false
-                );
-        }
     }
 }
